@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net"
 	"strconv"
 )
@@ -20,9 +19,9 @@ type sensVals struct {
 	} `json:"dth22"`
 }
 
-func readSensor(host string, port int) (values, error) {
+func readSensor(hostport string) (values, error) {
 	var val values
-	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%d", host, port))
+	conn, err := net.Dial("tcp", hostport)
 	if err != nil {
 		return val, err
 	}
