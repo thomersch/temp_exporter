@@ -25,7 +25,7 @@ func readSensor(hostport string) (values, error) {
 	if err != nil {
 		return val, err
 	}
-	_, err = conn.Write([]byte("THL0000000000"))
+	_, err = conn.Write([]byte("THL000999000999"))
 	if err != nil {
 		return val, err
 	}
