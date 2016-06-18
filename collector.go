@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net"
 	"strconv"
+	"time"
 )
 
 type values struct {
@@ -21,7 +22,7 @@ type sensVals struct {
 
 func readSensor(hostport string) (values, error) {
 	var val values
-	conn, err := net.Dial("tcp", hostport)
+	conn, err := net.DialTimeout("tcp", hostport, time.Second)
 	if err != nil {
 		return val, err
 	}
