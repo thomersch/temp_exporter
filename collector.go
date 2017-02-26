@@ -2,8 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net"
+	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -22,11 +26,27 @@ type sensVals struct {
 
 func readSensor(hostport string) (values, error) {
 	var val values
+
+	cmd := []byte(*cmdString)
+	if strings.HasPrefix(*cmdString, "http") {
+		resp, err := http.Get(*cmdString)
+		if err != nil {
+			log.Printf("could not fetch remote command: %v", err)
+			return val, err
+		}
+		defer resp.Body.Close()
+		buf, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return val, err
+		}
+		cmd = buf
+	}
+
 	conn, err := net.DialTimeout("tcp", hostport, time.Second)
 	if err != nil {
 		return val, err
 	}
-	_, err = conn.Write([]byte("THL000999000999"))
+	_, err = conn.Write(cmd)
 	if err != nil {
 		return val, err
 	}
