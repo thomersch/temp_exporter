@@ -41,7 +41,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 		vals, err := readSensor(target)
 		if err != nil {
 			log.Printf("could not read from sensor: %s", err)
-			return
+			continue
 		}
 
 		temperature.WithLabelValues(target).Set(vals.temperature)
